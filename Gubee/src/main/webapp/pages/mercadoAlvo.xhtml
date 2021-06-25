@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"> <h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Lista de Mercado Alvo</title>
+
+	<h:outputStylesheet library="css" name="estilo.css"></h:outputStylesheet>
+</h:head> <h:body>
+	<p:growl id="mensagem"></p:growl>
+
+
+	<h:form id="formListagem">
+		<p:panel header="Lista de Mercado Alvo">
+			<p:dataTable emptyMessage="Nenhum registro encontrado."
+				paginator="true" value="#{mercadoAlvoBean.mercadosAlvo}"
+				var="mercadpAlvo" rows="6" id="tabela">
+				<f:facet name="header">
+					<p:commandButton value="Novo" oncomplete="PF('dialogo').show();"
+						actionListener="#{mercadoAlvoBean.novo}"
+						update=":mensagem :formCadastro:pnCadastro" />
+				</f:facet>
+
+				<p:column headerText="Codigo">
+					<h:outputText value="#{mercadpAlvo.codigo}"></h:outputText>
+				</p:column>
+
+				<p:column headerText="Mercado Alvo"
+					sortBy="#{mercadpAlvo.nomeMercadoAlvo}"
+					filterBy="#{mercadpAlvo.nomeMercadoAlvo}">
+					<h:outputText value="#{mercadpAlvo.nomeMercadoAlvo}"></h:outputText>
+				</p:column>
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-icon-trash"
+						actionListener="#{mercadoAlvoBean.excluir}"
+						update=":mensagem :formCadastro:pnCadastro :formListagem:tabela"
+						oncomplete="PF('dialogo').hide();">
+						<p:confirm header="Confirmação"
+							message="Deseja excluir a Mercado Alvo" icon="ui-icon-alert" />
+						<f:attribute name="mercadoAlvoSelecionado" value="#{mercadpAlvo}" />
+					</p:commandButton>
+					<p:commandButton icon="ui-icon-pencil"
+						actionListener="#{mercadoAlvoBean.editar}"
+						update=":formCadastro:pnCadastro"
+						oncomplete="PF('dialogo').show();">
+					<f:attribute name="mercadoAlvoSelecionado" value="#{mercadpAlvo}" />
+					</p:commandButton>
+
+
+				</p:column>
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="Não" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</p:panel>
+	</h:form>
+
+	<p:dialog header="Mercado Alvo - Cadastro" widgetVar="dialogo"
+		draggable="false" resizable="false" modal="true" closable="false">
+		<h:form id="formCadastro">
+
+
+			<h:panelGrid columns="2" id="pnCadastro">
+				<p:outputLabel value="Mercado Alvo:" />
+				<p:inputText maxlength="50" size="30"
+					value="#{mercadoAlvoBean.mercadoAlvo.nomeMercadoAlvo}" />
+
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:commandButton value="Salvar"
+					actionListener="#{mercadoAlvoBean.salvar}"
+					update=":mensagem :formCadastro:pnCadastro :formListagem:tabela"
+					oncomplete="PF('dialogo').hide();" />
+				<p:commandButton value="Fechar" oncomplete="PF('dialogo').hide();" />
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</h:body> </html>
